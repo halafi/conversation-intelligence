@@ -1,4 +1,7 @@
-export default function mapperTranscript(input) {
+// @flow strict
+import type { TranscriptInput, Transcript } from '../../records/Transcript';
+
+export default function mapperTranscript(input: TranscriptInput): Transcript {
   return {
     paragraphs: input.word_timings.map(wordTiming =>
       wordTiming.map(word => {

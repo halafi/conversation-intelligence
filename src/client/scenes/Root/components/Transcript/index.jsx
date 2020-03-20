@@ -1,6 +1,8 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import type { Dispatch } from 'redux';
 import { addMilliseconds, format } from 'date-fns';
 import { Box, Flex } from 'reflexbox/styled-components';
 import styled from 'styled-components';
@@ -42,8 +44,12 @@ const BlockWrapper = styled(Box)`
   }
 `;
 
-// eslint-disable-next-line react/prop-types
-const Transcript = ({ position, setPositionAction }) => (
+type Props = {
+  position: number,
+  setPositionAction: number => void,
+};
+
+const Transcript = ({ position, setPositionAction }: Props) => (
   <Flex variant="container" flexDirection="column" mt={4}>
     {data.paragraphs.map((par, i) => {
       const kind = i % 2 === 0 ? 'even' : 'odd';
@@ -55,21 +61,23 @@ const Transcript = ({ position, setPositionAction }) => (
               {formatTime(par[0].startTime)}
             </TimeIndiciator>
             <Box px={2} py={2}>
-              {par.map((word, j) => (
+              {par.map((wordTiming, j) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <span key={`${j}-${word}`}>
+                <span key={`${j}-${wordTiming.word}`}>
                   <WordText
                     active={
-                      (position >= word.startTime && position <= word.endTime) ||
-                      (position === word.startTime && position === word.endTime)
+                      (position >= wordTiming.startTime && position <= wordTiming.endTime) ||
+                      (position === wordTiming.startTime && position === wordTiming.endTime)
                     }
                     onClick={() =>
                       setPositionAction(
-                        word.startTime !== word.endTime ? word.startTime + 1 : word.startTime,
+                        wordTiming.startTime !== wordTiming.endTime
+                          ? wordTiming.startTime + 1
+                          : wordTiming.startTime,
                       )
                     }
                   >
-                    {word.word}
+                    {wordTiming.word}
                   </WordText>
                   {j < par.length - 1 ? ' ' : ''}
                 </span>
@@ -82,9 +90,10 @@ const Transcript = ({ position, setPositionAction }) => (
   </Flex>
 );
 
+// $FlowFixMe
 export default connect(
   state => ({ status: state.sound.status, position: state.sound.position }),
-  dispatch => ({
+  (dispatch: Dispatch<any>) => ({
     setPositionAction: bindActionCreators(setPosition, dispatch),
   }),
 )(Transcript);

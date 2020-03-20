@@ -1,3 +1,4 @@
+// @flow strict
 import mapperTranscript from '..';
 
 describe('#mapperTranscript', () => {

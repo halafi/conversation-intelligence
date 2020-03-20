@@ -1,5 +1,7 @@
+// @flow
 import React from 'react';
 import { bindActionCreators } from 'redux';
+import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Sound from 'react-sound';
 import { Flex, Box } from 'reflexbox/styled-components';
@@ -40,8 +42,15 @@ const Select = styled.select`
   border-radius: 5px;
 `;
 
+type Props = {
+  status: any,
+  position: number,
+  setStatusAction: string => void,
+  setPositionAction: number => void,
+};
+
 // eslint-disable-next-line react/prop-types
-const PlayerControls = ({ status, position, setStatusAction, setPositionAction }) => (
+const PlayerControls = ({ status, position, setStatusAction, setPositionAction }: Props) => (
   <Flex bg="gray" height={65}>
     <Flex px={2} variant="container" width={1} alignItems="center" justifyContent="space-between">
       <ButtonBar alignItems="center">
@@ -99,9 +108,10 @@ const PlayerControls = ({ status, position, setStatusAction, setPositionAction }
   </Flex>
 );
 
+// $FlowFixMe
 export default connect(
   state => ({ status: state.sound.status, position: state.sound.position }),
-  dispatch => ({
+  (dispatch: Dispatch<any>) => ({
     setStatusAction: bindActionCreators(setStatus, dispatch),
     setPositionAction: bindActionCreators(setPosition, dispatch),
   }),

@@ -1,6 +1,12 @@
+// @flow strict
 import Sound from 'react-sound';
 
-const INITIAL_STATE = {
+type SoundReducer = {
+  status: string,
+  position: number,
+};
+
+const INITIAL_STATE: SoundReducer = {
   status: Sound.status.STOPPED,
   position: 0,
 };
@@ -9,15 +15,17 @@ const INITIAL_STATE = {
 const SET_STATUS = 'SET_STATUS';
 const SET_POSITION = 'SET_POSITION';
 
+type Action = { type: 'SET_STATUS', status: string } | { type: 'SET_POSITION', position: number };
+
 // action creators
-export function setStatus(status) {
+export function setStatus(status: string) {
   return {
     type: SET_STATUS,
     status,
   };
 }
 
-export function setPosition(position) {
+export function setPosition(position: number) {
   return {
     type: SET_POSITION,
     position,
@@ -25,7 +33,7 @@ export function setPosition(position) {
 }
 
 // reducer
-function sound(state = INITIAL_STATE, action) {
+function sound(state: SoundReducer = INITIAL_STATE, action: Action) {
   if (!action.type) {
     return state;
   }

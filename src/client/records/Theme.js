@@ -1,3 +1,4 @@
+// @flow strict
 const Theme = {
   colors: {
     text: '#000000',
