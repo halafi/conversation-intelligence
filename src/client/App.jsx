@@ -16,7 +16,7 @@ const store = createStore(
   rootReducer,
   composeEnhancers(
     applyMiddleware(thunk),
-    process.env.NODE_ENV === 'development' ? applyMiddleware(logger) : null,
+    process.env.NODE_ENV === 'development' ? applyMiddleware(logger) : undefined,
   ),
 );
 
