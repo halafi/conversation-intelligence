@@ -1,8 +1,18 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import Sound from 'react-sound';
 import { Flex, Box } from 'reflexbox/styled-components';
 import styled from 'styled-components';
-import { PauseCircleFilled, RotateLeft, RotateRight, Reply } from '@styled-icons/material';
+import {
+  PauseCircleFilled,
+  PlayCircleFilled,
+  RotateLeft,
+  RotateRight,
+  Reply,
+} from '@styled-icons/material';
 import Theme from '../../records/Theme';
+import { setStatus } from '../../reducers/sound';
 
 const Button = styled(Box)`
   border: 1px solid ${({ theme }) => theme.colors.gray2};
@@ -30,7 +40,7 @@ const Select = styled.select`
   border-radius: 5px;
 `;
 
-const Navbar = () => (
+const Navbar = ({ status, position, setStatusAction }) => (
   <Flex bg="gray" height={65}>
     <Flex px={2} variant="container" width={1} alignItems="center" justifyContent="space-between">
       <ButtonBar alignItems="center">
@@ -38,8 +48,25 @@ const Navbar = () => (
           <RotateLeft size={24} color={Theme.colors.tertiary} />
         </Box>
         <Box px={1}>
-          <PauseCircleFilled size={38} color={Theme.colors.primary} />
+          {status === Sound.status.STOPPED || status === Sound.status.PAUSED ? (
+            <PlayCircleFilled
+              size={38}
+              color={Theme.colors.primary}
+              onClick={() => setStatusAction(Sound.status.PLAYING)}
+            />
+          ) : (
+            <PauseCircleFilled
+              size={38}
+              color={Theme.colors.primary}
+              onClick={() => setStatusAction(Sound.status.PAUSED)}
+            />
+          )}
         </Box>
+        <Sound
+          url="https://zenprospect-production.s3.amazonaws.com/uploads/phone_call/uploaded_content/59e106639d79684277df770d.wav"
+          playStatus={status}
+          position={position}
+        />
         <Box px={1}>
           <RotateRight size={24} color={Theme.colors.tertiary} />
         </Box>
@@ -61,4 +88,7 @@ const Navbar = () => (
   </Flex>
 );
 
-export default Navbar;
+export default connect(
+  state => ({ status: state.sound.status, position: state.sound.position }),
+  dispatch => ({ setStatusAction: bindActionCreators(setStatus, dispatch) }),
+)(Navbar);

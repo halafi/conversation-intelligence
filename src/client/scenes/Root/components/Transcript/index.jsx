@@ -1,4 +1,5 @@
 import React from 'react';
+import { addMilliseconds, format } from 'date-fns';
 import { Flex } from 'reflexbox/styled-components';
 import styled from 'styled-components';
 import transcript from '../../../../../../data/transcript.json';
@@ -12,6 +13,9 @@ const getBorderColor = (kind, theme) =>
   kind === 'even' ? theme.colors.lightBlue : theme.colors.lightPurple;
 
 const getColor = (kind, theme) => (kind === 'even' ? theme.colors.primary : theme.colors.secondary);
+
+const formatTime = timeMillis =>
+  format(addMilliseconds(new Date().setHours(0, 0, 0, 0), timeMillis), 'mm:ss');
 
 const TimeIndiciator = styled(Flex)`
   color: ${({ theme, kind }) => getColor(kind, theme)};
@@ -27,7 +31,7 @@ const Transcript = () => (
         // eslint-disable-next-line react/no-array-index-key
         <Flex key={i} py={2} ml={kind === 'odd' ? 70 : 0}>
           <TimeIndiciator kind={kind} px={2} py={2} flexDirection="column">
-            {par[0].startTime}
+            {formatTime(par[0].startTime)}
           </TimeIndiciator>
           <Flex px={2} py={2}>
             {par.map((word, j) => `${word.word}${j < par.length - 1 ? ' ' : ''}`)}
