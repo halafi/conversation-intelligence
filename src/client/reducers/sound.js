@@ -33,7 +33,7 @@ function sound(state = INITIAL_STATE, action) {
     case SET_STATUS:
       return { ...state, status: action.status };
     case SET_POSITION:
-      return { ...state, status: action.position };
+      return { ...state, position: action.position };
     default:
       return state;
   }

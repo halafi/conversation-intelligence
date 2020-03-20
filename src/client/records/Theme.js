@@ -5,6 +5,7 @@ const Theme = {
     secondary: '#886CE6',
     tertiary: '#566D85',
     lightBlue: '#CEE1F0',
+    lightBlue2: '#CCE5F9',
     lightPurple: '#E1DAF8',
     white: '#FAFCFD',
     gray: '#EFF3F6',
@@ -18,8 +19,6 @@ const Theme = {
       maxWidth: '1220px',
     },
   },
-  // breakpoints: ['40em', '52em', '64em'],
-  // space: [0, 4, 8, 16, 32, 64, 128, 256],
 };
 
 export default Theme;

@@ -12,7 +12,7 @@ import {
   Reply,
 } from '@styled-icons/material';
 import Theme from '../../records/Theme';
-import { setStatus } from '../../reducers/sound';
+import { setStatus, setPosition } from '../../reducers/sound';
 
 const Button = styled(Box)`
   border: 1px solid ${({ theme }) => theme.colors.gray2};
@@ -40,12 +40,17 @@ const Select = styled.select`
   border-radius: 5px;
 `;
 
-const Navbar = ({ status, position, setStatusAction }) => (
+// eslint-disable-next-line react/prop-types
+const PlayerControls = ({ status, position, setStatusAction, setPositionAction }) => (
   <Flex bg="gray" height={65}>
     <Flex px={2} variant="container" width={1} alignItems="center" justifyContent="space-between">
       <ButtonBar alignItems="center">
         <Box px={1}>
-          <RotateLeft size={24} color={Theme.colors.tertiary} />
+          <RotateLeft
+            size={24}
+            color={Theme.colors.tertiary}
+            onClick={() => setPositionAction(position - 10000)}
+          />
         </Box>
         <Box px={1}>
           {status === Sound.status.STOPPED || status === Sound.status.PAUSED ? (
@@ -65,10 +70,16 @@ const Navbar = ({ status, position, setStatusAction }) => (
         <Sound
           url="https://zenprospect-production.s3.amazonaws.com/uploads/phone_call/uploaded_content/59e106639d79684277df770d.wav"
           playStatus={status}
+          onPlaying={ev => setPositionAction(ev.position)}
+          onFinishedPlaying={() => setStatusAction(Sound.status.STOPPED)}
           position={position}
         />
         <Box px={1}>
-          <RotateRight size={24} color={Theme.colors.tertiary} />
+          <RotateRight
+            size={24}
+            color={Theme.colors.tertiary}
+            onClick={() => setPositionAction(position + 10000)}
+          />
         </Box>
         <Box px={3}>
           <Select id="speed" value="1">
@@ -90,5 +101,8 @@ const Navbar = ({ status, position, setStatusAction }) => (
 
 export default connect(
   state => ({ status: state.sound.status, position: state.sound.position }),
-  dispatch => ({ setStatusAction: bindActionCreators(setStatus, dispatch) }),
-)(Navbar);
+  dispatch => ({
+    setStatusAction: bindActionCreators(setStatus, dispatch),
+    setPositionAction: bindActionCreators(setPosition, dispatch),
+  }),
+)(PlayerControls);
