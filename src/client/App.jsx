@@ -14,10 +14,7 @@ import rootReducer from './reducers';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   rootReducer,
-  composeEnhancers(
-    applyMiddleware(thunk),
-    process.env.NODE_ENV === 'development' ? applyMiddleware(logger) : undefined,
-  ),
+  composeEnhancers(applyMiddleware(thunk), applyMiddleware(logger)), // logger should be omitted on production
 );
 
 // global css
