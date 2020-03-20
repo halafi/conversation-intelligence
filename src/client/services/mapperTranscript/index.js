@@ -9,7 +9,6 @@ export default function mapperTranscript(input) {
           // convert to millis
           startTime: startTime * 1000,
           endTime: endTime * 1000,
-          duration: endTime * 1000 - startTime * 1000,
         };
       }),
     ),
